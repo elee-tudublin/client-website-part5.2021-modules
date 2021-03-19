@@ -34,7 +34,7 @@ let displayProducts = ((products) => {
                     <span class="bi bi-trash" data-toggle="tooltip" 
                       title="Delete Product"></span></button>
                   </td>
-  
+
                 </tr>`;
 
         return row;
@@ -55,8 +55,6 @@ let displayProducts = ((products) => {
         updateButtons[i].addEventListener("click", prepareProductUpdate);
         deleteButtons[i].addEventListener("click", deleteProduct);
     }
-
-
 }); // end function
 
 
@@ -69,20 +67,27 @@ let displayCategories = ((categories) => {
         // The link has an onclick handler
         // updateProductsView(id)
         // passing the category id as a parameter
-        return `<a href="#" 
-                class="list-group-item list-group-item-action" 
-                onclick="view.updateProductsView('${category._id}')">
+        return `<a href="#" id="${category._id}"
+                class="list-group-item list-group-item-action category-link"> 
                 ${category.category_name}</a>`;
     });
 
     // use  unshift to add a 'Show all' link at the start of the array of catLinks
-    catLinks.unshift(`<a href="#" 
-      class="list-group-item list-group-item-action" 
-      onclick="view.loadProducts()">Show all</a>`);
+    catLinks.unshift(`<a href="#" id="showAllProducts"
+      class="list-group-item list-group-item-action">All Products</a>`);
 
     // Set the innerHTML of the productRows element = the links contained in catlinks
     // .join('') converts an array to a string, replacing the , seperator with blank.
     document.getElementById('categoryList').innerHTML = catLinks.join('');
+
+    //
+    // Add Event Listners - one for each link
+    const categoryLinks = document.getElementsByClassName('category-link');
+    for (let i = 0; i < categoryLinks.length; i++) {
+        categoryLinks[i].addEventListener("click", updateProductsView);
+    }
+    // Add Event Lisner for all products link
+    document.getElementById('showAllProducts').addEventListener("click", loadProducts);
 
     //
     // *** Fill select list in product form ***
@@ -106,12 +111,12 @@ let displayCategories = ((categories) => {
 
 //
 // update products list when category is selected to show only products from that category
-let updateProductsView = (async (id) => {
-    const products = await productData.getProductsByCategory(id);
+async function updateProductsView() {
+    const products = await productData.getProductsByCategory(this.id);
     if (products) {
         displayProducts(products);
     }
-}); // End function 
+} // End function 
 
 //
 // Get values from product form

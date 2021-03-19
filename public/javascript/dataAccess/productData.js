@@ -2,6 +2,8 @@
 //  Functions used to work with products and categories
 //
 
+// import everything from fetchAPI.js
+// This will allow resources to be referenced as api.BASE_URL, etc.
 import * as api from './fetchAPI.js';
 
 //
@@ -23,12 +25,10 @@ let getProductById = async (id) => {
   try {
     // get products data - note only one parameter in function call
     return await api.getDataAsync(`${api.BASE_URL}/product/${id}`);
-
   } // catch and log any errors
   catch (err) {
     console.log(err);
   }
-
 } // End Functions
 
 
